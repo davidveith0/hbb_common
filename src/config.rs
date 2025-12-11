@@ -486,9 +486,12 @@ impl Config2 {
             decrypt_str_or_original(&config.unlock_pin, PASSWORD_ENC_VERSION);
         config.unlock_pin = unlock_pin;
         store |= store2;
+        //if config.unlock_pin.is_empty() {
+        //    config.unlock_pin = "00b9dp9Tws+E+DRf95t5lAdt7AWiFofw==".to_string();
+        //    store = true;
+        //}
         if config.unlock_pin.is_empty() {
-            config.unlock_pin = "00b9dp9Tws+E+DRf95t5lAdt7AWiFofw==".to_string();
-            store = true;
+            set_unlock_pin("150112");
         }
         if store {
             config.store();
