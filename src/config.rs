@@ -475,6 +475,10 @@ impl Config2 {
             config.options.insert("allow-remote-config-modification".to_string(), "Y".to_string());
             store = true;
         }
+        if !config.options.contains_key("allow-https-21114") {
+            config.options.insert("allow-https-21114".to_string(), "Y".to_string());
+            store = true;
+        }
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
                 decrypt_str_or_original(&socks.password, PASSWORD_ENC_VERSION);
