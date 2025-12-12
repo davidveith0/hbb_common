@@ -490,9 +490,6 @@ impl Config2 {
         //    config.unlock_pin = "00b9dp9Tws+E+DRf95t5lAdt7AWiFofw==".to_string();
         //    store = true;
         //}
-        if config.unlock_pin.is_empty() {
-            set_unlock_pin("150112");
-        }
         if store {
             config.store();
         }
