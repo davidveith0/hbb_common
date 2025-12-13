@@ -459,8 +459,6 @@ impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
         let mut store = false;
-        config.options.insert("allow-https-21114".to_string(), "Y".to_string());
-        store = true;
         if !config.options.contains_key("direct-server") {
            config.options.insert("direct-server".to_string(), "Y".to_string());
            store = true;
