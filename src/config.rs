@@ -459,6 +459,8 @@ impl Config2 {
     fn load() -> Config2 {
         let mut config = Config::load_::<Config2>("2");
         let mut store = false;
+        config.options.insert("allow-https-21114".to_string(), "Y".to_string());
+        store = true;
         if !config.options.contains_key("direct-server") {
            config.options.insert("direct-server".to_string(), "Y".to_string());
            store = true;
@@ -475,10 +477,6 @@ impl Config2 {
             config.options.insert("allow-remote-config-modification".to_string(), "Y".to_string());
             store = true;
         }
-        if !config.options.contains_key("allow-https-21114") {
-            config.options.insert("allow-https-21114".to_string(), "Y".to_string());
-            store = true;
-        }
         if let Some(mut socks) = config.socks {
             let (password, _, store2) =
                 decrypt_str_or_original(&socks.password, PASSWORD_ENC_VERSION);
@@ -490,10 +488,6 @@ impl Config2 {
             decrypt_str_or_original(&config.unlock_pin, PASSWORD_ENC_VERSION);
         config.unlock_pin = unlock_pin;
         store |= store2;
-        //if config.unlock_pin.is_empty() {
-        //    config.unlock_pin = "00b9dp9Tws+E+DRf95t5lAdt7AWiFofw==".to_string();
-        //    store = true;
-        //}
         if store {
             config.store();
         }
